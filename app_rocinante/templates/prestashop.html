@@ -5,5 +5,18 @@
 {% endblock stylesheets %}
 
 {% block content %}
-<h1>Prestashop Connector</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Prestashop Connector</h1>
+      <ul>
+        {% for product in products %}
+        <li>
+          ID : {{ product.id_product }} | Price: {{ product.price }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
 {% endblock content %}
