@@ -12,7 +12,14 @@
       <ul>
         {% for product in products %}
         <li>
-          ID : {{ product.id_product }} | Price: {{ product.price }}
+          <div class="row">
+            <div class="col-md-4">
+              NAME : {{ product.name }} | Category: {{ product.category }}| Price: {{ product.price }}
+            </div>
+            <div class="col-md-8">
+              {{ product.description_short|safe }}
+            </div>
+          </div>
         </li>
         {% endfor %}
       </ul>

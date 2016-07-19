@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>{{  customer_name }}</h1>
+      <h3>Productos disponibles: {{ customer_nr_products }} </h3>
+      <h4>{{ message }}</h4>
+      <a class="btn btn-danger" href="{% url 'products_update' %}">Actualizar Productos</a>
+    </div>
+  </div>
+</div>
+{% endblock content %}

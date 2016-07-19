@@ -7,6 +7,15 @@ from .connector import PrestashopProducts
 
 def ConnectionTest(request):
     title = 'Rocinante'
+
+    context = {
+        'products': products,
+        'title': title,
+    }
+
+    return render(request, 'prestashop.html', context )
+
+def RetrieveProducts():
     config = {
       'user': 'root',
       'password': 'root',
@@ -16,9 +25,4 @@ def ConnectionTest(request):
       'raise_on_warnings': True,
     }
     products =  PrestashopProducts(config)
-    context = {
-        'products': products,
-        'title': title,
-    }
-
-    return render(request, 'prestashop.html', context )
+    return products

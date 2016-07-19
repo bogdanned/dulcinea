@@ -21,3 +21,15 @@ class Product(models.Model):
 
     def __unicode__(self):
         return "%s | %s" % (self.name, self.customer)
+
+#Our Customer Info
+class Customer(models.Model):
+    nr_products = models.IntegerField(null=True, blank = True, verbose_name = 'Nr. Productos')
+    name = models.CharField(max_length = 200, null=True, blank = True, verbose_name = 'Name')
+
+    class Meta:
+        verbose_name_plural = 'Clientes'
+        verbose_name = 'Cliente'
+
+    def __unicode__(self):
+        return "%s | %s" % (self.name, self.nr_products)
