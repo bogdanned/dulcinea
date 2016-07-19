@@ -8,8 +8,42 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h1>Dashboard</h1>
+      <img src="{% static 'images/bagwoman.jpg'%}" id="target">
     </div>
   </div>
 </div>
 {% endblock content %}
+
+{% block javascript%}
+<script src="{% static 'js/darkroomjs/demo/vendor/fabric.js'%}"></script>¬
+<script src="{% static 'js/darkroomjs/demo/build/darkroom.js'%}"></script>¬
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+<script>
+  new Darkroom('#target', {
+  // Canvas initialization size
+  minWidth: 100,
+  minHeight: 100,
+  maxWidth: 500,
+  maxHeight: 500,
+
+  // Plugins options
+  plugins: {
+    crop: {
+      minHeight: 50,
+      minWidth: 50,
+      ratio: 1
+    },
+    save: false // disable plugin
+  },
+
+  // Post initialization method
+  initialize: function() {
+    // Active crop selection
+    this.plugins['crop'].requireFocus();
+
+    // Add custom listener
+    this.addEventListener('core:transformation', function() { /* ... */ });
+  }
+});
+</script>
+{% endblock javascript%}
