@@ -14,7 +14,7 @@ class Product(models.Model):
     image_local_path = models.CharField(max_length = 1000, null=True, blank = True, verbose_name = 'Path Local Image')
     name = models.CharField(max_length = 200, null=True, blank = True, verbose_name = 'Name')
     description = models.CharField(max_length = 1000, null=True, blank = True, verbose_name = 'Description')
-
+    category = models.CharField(max_length = 600, null=True, blank = True, verbose_name = 'Description')
     class Meta:
         verbose_name_plural = 'Productos'
         verbose_name = 'Producto'

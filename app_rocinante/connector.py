@@ -12,12 +12,12 @@ def PrestashopProducts(config):
     try:
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-        query = ("SELECT id_product, price FROM ps_product ")
+        query = ("SELECT id_product, price, active FROM ps_product ")
         cursor.execute(query)
-        for (id_product, price) in cursor:
-            print id_product
-            products.append({'id_product': id_product,
-                          'price': price})
+        for (id_product, price, active) in cursor:
+            if (active == 1):
+                products.append({'id_product': id_product,
+                              'price': price})
         cursor.close()
         return products
     except mysql.connector.Error as err:
