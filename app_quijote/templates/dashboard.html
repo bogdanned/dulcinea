@@ -12,9 +12,18 @@
     </div>
   </div>
 </div>
+
+<div class="container">
+  <div id="chart-container">
+
+  </div>
+</div>
+
+
 {% endblock content %}
 
 {% block javascript%}
+<script  type="text/javascript" src="{% static 'js/react/build/dulcinea.min.js' %}"></script>
 <script src="{% static 'js/darkroomjs/demo/vendor/fabric.js'%}"></script>¬
 <script src="{% static 'js/darkroomjs/demo/build/darkroom.js'%}"></script>¬
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
@@ -46,4 +55,7 @@
   }
 });
 </script>
+<script  type="text/javascript" src="{% static 'js/react/build/fusioncharts.js' %}"></script>
+<script  type="text/javascript" src="{% static 'js/react/build/react-fusioncharts.js' %}"></script>
+
 {% endblock javascript%}
