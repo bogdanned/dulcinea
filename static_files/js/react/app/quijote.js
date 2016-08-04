@@ -36,7 +36,7 @@ var myDataSource = {
 
 var chartConfigs = {
     id: "revenue-chart",
-    renderAt: "revenue-chart-container",
+    renderAt: "react-chartContaniner",
     type: "column2d",
     width:600,
     height: 400,
@@ -46,5 +46,5 @@ var chartConfigs = {
 
 React.render(
     <react_fc.FusionCharts {...chartConfigs} />,
-    document.getElementById("chart-container")
+    document.getElementById("react-chartContaniner")
 );
