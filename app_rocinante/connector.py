@@ -2,13 +2,20 @@
 import mysql.connector
 from mysql.connector import errorcode
 
+#Signals
+from app_sancho.signals import product_query_initiated
+from app_sancho.signals import product_query_finished
+from app_sancho.signals import product_query_failed
+
 ######################Prestashop Utility###############################
 
 #Input:
 # config: configutation array
 # query: mysql query to be executed
-def PrestashopProducts(config):
+#Output Products of a prestashop made ecommerce(Prestashop 1.5)
+def ProductRetrievePrestashop(config):
     products = [];
+    product_query_initiated.send(sender='query initiated')
     try:
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
@@ -24,15 +31,19 @@ def PrestashopProducts(config):
                               'name': name,
                               'category':  category_name,})
         cursor.close()
+        product_query_finished.send(sender='query finished')
         #Get All product Category Names
         return products
     except mysql.connector.Error as err:
       if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Something is wrong with your user name or password")
+        error = "Something is wrong with your user name or password!"
+        product_query_failed.send(sender=error)
       elif err.errno == errorcode.ER_BAD_DB_ERROR:
-        print("Database does not exist")
+        error = "Database does not exist!"
+        product_query_failed.send(sender=error)
       else:
-        print(err)
+        print err
+        product_query_failed.send(sender=err)
     else:
       cnx.close()
     return products

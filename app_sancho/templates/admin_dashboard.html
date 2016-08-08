@@ -8,10 +8,11 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h1>{{  customer.name }}</h1>
-      <h3>Productos disponibles: {{ customer.nr_products }} </h3>
-      <h4>{{ message }}</h4>
-      <a class="btn btn-danger" href="{% url 'products_update' customer.id %}">Actualizar Productos</a>
+      <h1>Clientes Actuales</h1>
+      {% for customer in customers %}
+      <a href="{% url 'customer_view' customer.pk %}">Nombre: {{customer.name}}</a>
+      <h4>Productos(actualizados): {{customer.nr_products}}</h4>
+      {% endfor %}
     </div>
   </div>
 </div>
