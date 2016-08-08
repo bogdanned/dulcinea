@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'app_rocinante',
     'app_sancho',
     'app_quijote',
+    'app_galgo',
 ]
 
 MIDDLEWARE_CLASSES = [

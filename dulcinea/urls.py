@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^rocinante/', include('app_rocinante.urls')),
     url(r'^sancho/', include('app_sancho.urls')),
     url(r'^quijote/', include('app_quijote.urls')),
+    url(r'^galgo/', include('app_galgo.urls')),
 ]
