@@ -161,19 +161,24 @@ def GalgoFbCampaignCreation(request):
 
     print(creative)
 
-    def __unicode_(self):
-        return (AdCreative.id)
+    print(image[AdImage.Field.hash])
+    print('Rocket Maverickssss')
+    print(adset[AdSet.Field.id])
+
+    adset_id = adset[AdSet.Field.id]
+    creative_id = creative[AdCreative.Field.id]
 
     # Creating the actual add
     ad = Ad(parent_id = config['act_id'])
     ad[Ad.Field.name] = 'My Ad'
-    ad[Ad.Field.adset_id] = AdSet['id']
+    ad[Ad.Field.adset_id] = adset_id
     ad[Ad.Field.creative] = {
         'creative_id': creative_id
     }
     ad.remote_create(params={
         'status': Ad.Status.paused,
     })
+    print(ad)
 
 
 
