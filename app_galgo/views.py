@@ -24,6 +24,11 @@ from facebookads.adobjects.campaign import Campaign
 from facebookads.adobjects.targetingsearch import TargetingSearch
 from facebookads.adobjects.targeting import Targeting
 from facebookads.adobjects.adset import AdSet
+from facebookads.adobjects.adimage import AdImage
+from facebookads.adobjects.adcreative import AdCreative
+from facebookads.adobjects.adcreativelinkdata import AdCreativeLinkData
+from facebookads.adobjects.adcreativeobjectstoryspec import AdCreativeObjectStorySpec
+from facebookads.adobjects.ad import Ad
 
 def GalgoFbCampaignCreation(request):
     this_dir = os.path.dirname(__file__)
@@ -59,7 +64,7 @@ def GalgoFbCampaignCreation(request):
     })
     print campaign
 
-    # Searching target audiences inside facebook
+    # Searching target audixences inside facebook
     params = {
         'q': 'real madrid baloncesto',
         'type': 'adinterest',
@@ -119,6 +124,59 @@ def GalgoFbCampaignCreation(request):
     })
 
     print('///--- ADSET CREATION: OK ---///')
+    print(adset)
+
+    account = AdAccount(config['act_id'])
+    images = account.get_ad_images()
+    print(images)
+
+    # Creating AdImage from Image file
+    image = AdImage(parent_id=config['act_id'])
+    image[AdImage.Field.filename] = os.path.join(this_dir, 'images', 'big_bike.jpg')
+    image.remote_create()
+
+    # Output the image hash
+    print(image[AdImage.Field.hash])
+    print('Fuck yeah')
+
+    image_hash = image[AdImage.Field.hash]
+    page_id = config['page_id']
+
+
+    # Creating AdCreative
+    link_data = AdCreativeLinkData()
+    link_data[AdCreativeLinkData.Field.message] = 'try it out'
+    link_data[AdCreativeLinkData.Field.link] = 'www.instavets.com'
+    link_data[AdCreativeLinkData.Field.caption] = 'My caption'
+    link_data[AdCreativeLinkData.Field.image_hash] = image_hash
+
+    object_story_spec = AdCreativeObjectStorySpec()
+    object_story_spec[AdCreativeObjectStorySpec.Field.page_id] = page_id
+    object_story_spec[AdCreativeObjectStorySpec.Field.link_data] = link_data
+
+    creative = AdCreative(parent_id=config['act_id'])
+    creative[AdCreative.Field.name] = 'Ad Creative for link Ad'
+    creative[AdCreative.Field.object_story_spec] = object_story_spec
+    creative.remote_create()
+
+    print(creative)
+
+    def __unicode_(self):
+        return (AdCreative.id)
+
+    # Creating the actual add
+    ad = Ad(parent_id = config['act_id'])
+    ad[Ad.Field.name] = 'My Ad'
+    ad[Ad.Field.adset_id] = AdSet['id']
+    ad[Ad.Field.creative] = {
+        'creative_id': creative_id
+    }
+    ad.remote_create(params={
+        'status': Ad.Status.paused,
+    })
+
+
+
 
 
     context = {
