@@ -20,7 +20,10 @@ class CustomerAdmin(admin.ModelAdmin):
         CustomerAdminStackInline,
     ]
 
-admin.site.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['customer_product_id','name','created','price']
+
+admin.site.register(Product, ProductAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(CustomerStack)
 admin.site.register(CustomerDatabase)

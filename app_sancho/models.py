@@ -3,9 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 # Importing Signals
-from .signals import product_query_initiated
-from .signals import product_query_finished
-from .signals import product_query_failed
+from .signals import *
 
 # Signals functions
 def database_product_query_initiated(sender, **kwargs):
@@ -21,6 +19,7 @@ def database_product_query_failed(sender, **kwargs):
 product_query_initiated.connect(database_product_query_initiated)
 product_query_finished.connect(database_product_query_finished)
 product_query_failed.connect(database_product_query_failed)
+
 
 # Product Model
 class Product(models.Model):
