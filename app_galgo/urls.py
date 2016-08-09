@@ -3,5 +3,8 @@ import views
 
 
 urlpatterns = [
-    url(r'^$', views.GalgoFbCampaignCreation, name='GalgoFbCampaignCreation'),
+    url(r'^main$', views.GalgoGetFbCampaignRequirements, name='GalgoFbCampaignDefinition'),
+    url(r'^create$', views.GalgoFbCampaignCreation, name='GalgoFbCampaignCreation'),
+    url(r'^login$', views.GalgoFbLogin, name='GalgoLogin'),
+    url(r'^login/api/access_token$', views.GalgoApiAccesToken, name='api_access_token'),
 ]

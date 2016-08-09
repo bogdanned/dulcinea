@@ -17,8 +17,12 @@ from utils import ad_creation_utils
 import json
 import os
 
-# Creating a campaign remade
+# Creating the forms
+from django.http import HttpResponseRedirect
+from .forms import FbCampaignForm
 
+# Creating a campaign remade
+import time
 import datetime
 from facebookads.adobjects.campaign import Campaign
 from facebookads.adobjects.targetingsearch import TargetingSearch
@@ -29,6 +33,30 @@ from facebookads.adobjects.adcreative import AdCreative
 from facebookads.adobjects.adcreativelinkdata import AdCreativeLinkData
 from facebookads.adobjects.adcreativeobjectstoryspec import AdCreativeObjectStorySpec
 from facebookads.adobjects.ad import Ad
+
+
+def GalgoFbLogin(request):
+    context = {}
+    return render(request, 'login.html', context)
+
+def GalgoGetFbCampaignRequirements(request):
+     # if this is a POST request we need to process the form data
+     if request.method == 'POST':
+         # create a form instance and populate it with data from the request:
+         form = FbCampaignForm(request.POST)
+         # check whether it's valid:
+         if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/create')
+     # if a GET (or any other method) we'll create a blank form
+     else:
+         form = FbCampaignForm()
+
+     return render(request, 'requirements.html', {'form': form})
+
+
 
 def GalgoFbCampaignCreation(request):
     this_dir = os.path.dirname(__file__)
@@ -51,6 +79,7 @@ def GalgoFbCampaignCreation(request):
     FacebookAdsApi.set_default_api(api)
 
     # Creating Campaign with basic parameters
+
     campaign = Campaign(parent_id=config['act_id'])
     campaign.update({
         Campaign.Field.name: 'My first Campaign',
@@ -64,7 +93,7 @@ def GalgoFbCampaignCreation(request):
     })
     print campaign
 
-    # Searching target audixences inside facebook
+    # Searching target audiences inside facebook
     params = {
         'q': 'real madrid baloncesto',
         'type': 'adinterest',
@@ -75,6 +104,7 @@ def GalgoFbCampaignCreation(request):
     print(resp)
 
     # Creating a sample targeting out of our results
+    time.sleep(1)
 
     targeting = {'geo_locations':{
       'countries': ['US'],
@@ -109,11 +139,11 @@ def GalgoFbCampaignCreation(request):
     adset = AdSet(parent_id=config['act_id'])
     adset.update({
         AdSet.Field.name: 'My Ad Set',
-        AdSet.Field.campaign_id: campaign['id'],
+        AdSet.Field.campaign_id: campaign[Campaign.Field.id],
         AdSet.Field.daily_budget: 500,
         AdSet.Field.billing_event: AdSet.BillingEvent.impressions,
         AdSet.Field.optimization_goal: AdSet.OptimizationGoal.reach,
-        AdSet.Field.bid_amount: 2,
+        AdSet.Field.bid_amount: 20,
         AdSet.Field.targeting: targeting,
         AdSet.Field.start_time: start_time,
         AdSet.Field.end_time: end_time,
@@ -129,7 +159,7 @@ def GalgoFbCampaignCreation(request):
     account = AdAccount(config['act_id'])
     images = account.get_ad_images()
     print(images)
-
+    time.sleep(30)
     # Creating AdImage from Image file
     image = AdImage(parent_id=config['act_id'])
     image[AdImage.Field.filename] = os.path.join(this_dir, 'images', 'big_bike.jpg')
@@ -164,11 +194,11 @@ def GalgoFbCampaignCreation(request):
     print(image[AdImage.Field.hash])
     print('Rocket Maverickssss')
     print(adset[AdSet.Field.id])
-
+    time.sleep(15)
     adset_id = adset[AdSet.Field.id]
     creative_id = creative[AdCreative.Field.id]
 
-    # Creating the actual add
+    # Creating the actual ad
     ad = Ad(parent_id = config['act_id'])
     ad[Ad.Field.name] = 'My Ad'
     ad[Ad.Field.adset_id] = adset_id
@@ -180,11 +210,14 @@ def GalgoFbCampaignCreation(request):
     })
     print(ad)
 
-
-
-
-
     context = {
-
     }
-    return render(request, 'galgo_login.html', context)
+    return render(request, 'galgo_thanks.html', context)
+
+# Create your views here.
+def GalgoApiAccesToken(request):
+    if request.method == "POST":
+        data = request.POST
+        #1. Get data
+        access_token = data.__getitem__('access_token')
+        account = CustomerAccountsFb.objects.get(pk=1)

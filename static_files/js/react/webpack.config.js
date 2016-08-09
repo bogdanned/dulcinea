@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PATHS = {
-  app: path.join(__dirname, 'app/quijote.js'),
+  app: path.join(__dirname, 'app/galgo.js'),
   build: path.join(__dirname, 'build')
 };
 var webpack = require('webpack');

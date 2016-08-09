@@ -37,6 +37,7 @@
     "react": "^15.2.0",
     "react-addons-perf": "^15.2.0",
     "react-dom": "^15.2.0",
+    "react-facebook-login-component": "^0.5.2",
     "react-loader": "^2.4.0",
     "react-loader-advanced": "^1.4.1",
     "react-tether": "^0.5.2",
