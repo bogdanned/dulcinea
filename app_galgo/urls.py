@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^create$', views.GalgoFbCampaignCreation, name='GalgoFbCampaignCreation'),
     url(r'^login$', views.GalgoFbLogin, name='GalgoLogin'),
     url(r'^login/api/access_token$', views.GalgoApiAccesToken, name='api_access_token'),
+    url(r'^insights$', views.GalgoInsightsReporting, name='GalgoFbInsights'),
 ]

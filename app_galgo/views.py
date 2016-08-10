@@ -34,6 +34,8 @@ from facebookads.adobjects.adcreativelinkdata import AdCreativeLinkData
 from facebookads.adobjects.adcreativeobjectstoryspec import AdCreativeObjectStorySpec
 from facebookads.adobjects.ad import Ad
 
+# Insights view reports
+from facebookads.objects import Campaign
 
 def GalgoFbLogin(request):
     context = {}
@@ -55,8 +57,6 @@ def GalgoGetFbCampaignRequirements(request):
          form = FbCampaignForm()
 
      return render(request, 'requirements.html', {'form': form})
-
-
 
 def GalgoFbCampaignCreation(request):
     this_dir = os.path.dirname(__file__)
@@ -213,7 +213,6 @@ def GalgoFbCampaignCreation(request):
     context = {
     }
     return render(request, 'galgo_thanks.html', context)
-
 # Create your views here.
 def GalgoApiAccesToken(request):
     if request.method == "POST":
@@ -221,3 +220,32 @@ def GalgoApiAccesToken(request):
         #1. Get data
         access_token = data.__getitem__('access_token')
         account = CustomerAccountsFb.objects.get(pk=1)
+
+def GalgoInsightsReporting(request):
+    this_dir = os.path.dirname(__file__)
+    config_filename = os.path.join(this_dir, 'utils', 'config.json')
+
+    config_file = open(config_filename)
+    config = json.load(config_file)
+    config_file.close()
+    print('///--- ACESS CONFIGURATION: ',config, ' ---///')
+
+    ### Login to facebook and initiate the API
+    session = FacebookSession(
+        config['app_id'],
+        config['app_secret'],
+        config['access_token'],
+    )
+    api = FacebookAdsApi(session)
+    print('///--- SESSION INITIALIZATION: OK ---///')
+
+    FacebookAdsApi.set_default_api(api)
+
+    ad_account = AdAccount(config['act_id'])
+
+    campaign = Campaign('')
+    params = {
+        'date_preset': Campaign.date_preset.last_7_days,
+    }
+    insights = campaign.get_insights(params=params)
+    print insights
