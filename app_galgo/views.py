@@ -221,31 +221,45 @@ def GalgoApiAccesToken(request):
         access_token = data.__getitem__('access_token')
         account = CustomerAccountsFb.objects.get(pk=1)
 
+
+#Conf
 def GalgoInsightsReporting(request):
-    this_dir = os.path.dirname(__file__)
-    config_filename = os.path.join(this_dir, 'utils', 'config.json')
+   this_dir = os.path.dirname(__file__)
+   config_filename = os.path.join(this_dir, 'utils', 'config.json')
+   config_file = open(config_filename)
+   config = json.load(config_file)
+   config_file.close()
+   print('///--- ACESS CONFIGURATION: ',config, ' ---///')
 
-    config_file = open(config_filename)
-    config = json.load(config_file)
-    config_file.close()
-    print('///--- ACESS CONFIGURATION: ',config, ' ---///')
+   FacebookAdsApi.init(config['app_id'], config['app_secret'], config['access_token'])
+   print('///--- SESSION INITIALIZATION: OK ---///')
 
-    ### Login to facebook and initiate the API
-    session = FacebookSession(
-        config['app_id'],
-        config['app_secret'],
-        config['access_token'],
-    )
-    api = FacebookAdsApi(session)
-    print('///--- SESSION INITIALIZATION: OK ---///')
 
-    FacebookAdsApi.set_default_api(api)
+   account = AdAccount(config['act_id'])
+   account.remote_read(fields=[AdAccount.Field.timezone_name])
 
-    ad_account = AdAccount(config['act_id'])
 
-    campaign = Campaign('')
-    params = {
-        'date_preset': Campaign.date_preset.last_7_days,
-    }
-    insights = campaign.get_insights(params=params)
-    print insights
+   start = date(2016,01,01)
+   end = date(2016,06,01)
+
+   fields = [
+       Insights.Field.campaign_name,
+       Insights.Field.campaign_id,
+       Insights.Field.impressions,
+       Insights.Field.reach,
+       Insights.Field.actions,
+       Insights.Field.spend,
+       Insights.Field.ad_id
+   ]
+
+   params = {
+       'time_range': {'since': start, 'until': end},
+       'level': 'ad',
+       'limit': 1000
+   }
+   insights = account.get_insights(fields=fields, params=params)
+
+   for i in insights:
+       people_reached = int(i['reach'])
+       impressions = int(i['impressions'])
+       spend = float(i['spend'])

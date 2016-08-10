@@ -4,6 +4,7 @@ from django.db import models
 
 # Session initialization
 class CustomerAccountsFb(models.Model):
+    cutomer
     customer_app_id = models.IntegerField(null=True, blank = True, verbose_name = 'FbId')
     customer_app_secret = models.IntegerField(null=True, blank = True, verbose_name = 'FbSecret')
     customer_act_id = models.IntegerField(null=True, blank = True, verbose_name = 'AcounttId')
