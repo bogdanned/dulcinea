@@ -31,16 +31,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'djcelery',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #Own Apps
     'app_rocinante',
     'app_sancho',
     'app_quijote',
-    'djcelery',
+    'app_galgo',
 ]
 
 MIDDLEWARE_CLASSES = [

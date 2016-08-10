@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block content %}
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '345458552452936',
+      xfbml      : true,
+      version    : 'v2.7'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script>
+// Only works after `FB.init` is called
+function myFacebookLogin() {
+  FB.login(function(){}, {scope:'ads_read, ads_management, business_management'});
+  FB.getLoginStatus(function(response) {
+    if (response.status === 'connected') {
+      console.log(response.authResponse.accessToken);
+      console.log(response);
+
+    //SEndin Ajax to Django
+        $.ajax({
+         url : window.location.href + '/api/access_token';,
+         type : "POST",
+         data : { access_token: response.authResponse.accessToken }, // data sent with the post request
+         success : function(json) {
+           console.log('json booking sent and success')
+         },
+         error : function(xhr,errmsg,err) {
+             $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                 " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+         }
+     });
+
+    }
+});
+}
+</script>
+<button onclick="myFacebookLogin()">Login with Facebook</button>
+
+{% endblock content %}
+
+
+{% block javascript %}
+{% endblock javascript %}
