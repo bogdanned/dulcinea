@@ -20,6 +20,21 @@ product_query_initiated.connect(database_product_query_initiated)
 product_query_finished.connect(database_product_query_finished)
 product_query_failed.connect(database_product_query_failed)
 
+# Product Category Model
+class Category(models.Model):
+    created = models.DateTimeField(auto_now=False, auto_now_add=True, blank = False, null = False, verbose_name = 'Fecha Creacion')
+    customer_category_id = models.CharField(max_length = 600, null=True, blank = True, verbose_name = 'ID Categoria Cliente')
+    customer_parent_category = models.CharField(max_length = 600, null=True, blank = True, verbose_name = 'Categoria Padre')
+    name = models.CharField(max_length = 400, null=True, blank = True, verbose_name = 'Name')
+    description = models.TextField(max_length = 10000, null=True, blank = True, verbose_name = 'Description Larga')
+    customer = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'Cliente')
+
+    class Meta:
+        verbose_name_plural = 'Categorias'
+        verbose_name = 'Categoria'
+
+    def __unicode__(self):
+        return "%s" % (self.name)
 
 # Product Model
 class Product(models.Model):
@@ -31,8 +46,10 @@ class Product(models.Model):
     discount = models.IntegerField(null=True, blank = True, verbose_name = 'Descuento')
     image_local_path = models.CharField(max_length = 1000, null=True, blank = True, verbose_name = 'Path Local Image')
     name = models.CharField(max_length = 200, null=True, blank = True, verbose_name = 'Name')
-    description = models.CharField(max_length = 1000, null=True, blank = True, verbose_name = 'Description')
-    category = models.CharField(max_length = 600, null=True, blank = True, verbose_name = 'Categoria')
+    short_description = models.CharField(max_length = 60000, null=True, blank = True, verbose_name = 'Description Corta')
+    long_description = models.TextField(max_length = 100000, null=True, blank = True, verbose_name = 'Description Larga')
+    category = models.ManyToManyField(Category, verbose_name = 'Categoria')
+
     class Meta:
         verbose_name_plural = 'Productos'
         verbose_name = 'Producto'
