@@ -1,26 +1,37 @@
+#!/usr/bin/python
+# coding: utf-8
 from __future__ import unicode_literals
 
 from django.db import models
+from app_sancho.models import Customer
 
 # Session initialization
-class CustomerAccountsFb(models.Model):
-    cutomer
-    customer_app_id = models.IntegerField(null=True, blank = True, verbose_name = 'FbId')
-    customer_app_secret = models.IntegerField(null=True, blank = True, verbose_name = 'FbSecret')
-    customer_act_id = models.IntegerField(null=True, blank = True, verbose_name = 'AcounttId')
-    customer_page_id = models.IntegerField(null=True, blank = True, verbose_name = 'PageId')
-    customer_app_access_token = models.IntegerField(null=True, blank = True, verbose_name = 'FbSecretToken')
+class FbAccounts(models.Model):
+    class Meta:
+        verbose_name = "Cuenta de Facebook"
+        verbose_name_plural = "Cuentas de Facebook"
+    customer_app_id = models.CharField(null=True, blank = True, verbose_name = 'FbId')
+    customer_app_secret = models.CharField(null=True, blank = True, verbose_name = 'FbSecret')
+    customer_act_id = models.CharField(null=True, blank = True, verbose_name = 'AcounttId')
+    customer_page_id = models.CharField(null=True, blank = True, verbose_name = 'PageId')
+    customer_app_access_token = models.CharField(null=True, blank = True, verbose_name = 'FbSecretToken')
 
 # Campaign and Ad Creation
-class CustomerFbCampaignCreationData(models.Model):
-    customeraccount = models.ForeignKey(CustomerAccountsFb)
+class FbCampaign(models.Model):
+    class Meta:
+        verbose_name = "Campaña de Facebook"
+        verbose_name_plural = "Campañas de Facebook"
+    customeraccount = models.ForeignKey(FbAccounts, null=True)
     #Campaign models
-    campaign_name = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'CampaignName')
-    campaign_objective = models.CharField(max_length = 100, null=True, default='Campaign.Objective.link_clicks', verbose_name = 'CampaigObjective')
-    campaign_starting_status = models.CharField(max_length = 100, null=True, default='Campaign.Status.paused', verbose_name = 'CampaigStatus')
+    name = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'CampaignName')
+    objective = models.CharField(max_length = 100, null=True, default='Campaign.Objective.link_clicks', verbose_name = 'CampaigObjective')
+    starting_status = models.CharField(max_length = 400, null=True, default='Campaign.Status.paused', verbose_name = 'CampaigStatus')
 
-class CustomerFbAdSetCreationData(models.Model):
-    campaign = models.ForeignKey(CustomerFbCampaignCreationData)
+class FbAdSet(models.Model):
+    class Meta:
+        verbose_name = "Set de Anuncios"
+        verbose_name_plural = "Sets de Anuncios"
+    campaign = models.ForeignKey(FbCampaign)
     #Targeting models
     target_audience_type_term = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'q')
     target_audience_search_type = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'type')
@@ -36,8 +47,11 @@ class CustomerFbAdSetCreationData(models.Model):
     adset_field_optimization_goal = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'AdSetOptimizationGoal')
     adset_field_bid_amount = models.IntegerField(null=True, blank = True, verbose_name = 'IntegerField')
 
-class CustomerFbAdCreativesCreationData(models.Model):
-    adset = models.ForeignKey(CustomerFbAdSetCreationData)
+class FbAdCreatives(models.Model):
+    class Meta:
+        verbose_name = "Creativo Facebook"
+        verbose_name_plural = "Creativos Facebook"
+    adset = models.ForeignKey(FbAdSet)
     #Images path
     #AdCreatives
     adcreative_field_message = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'AdMessage')
@@ -46,8 +60,11 @@ class CustomerFbAdCreativesCreationData(models.Model):
 
     adcreative_field_name = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'AdCreativeName')
 
-class CustomerFbAdCreationData(models.Model):
-    adcreative = models.ForeignKey(CustomerFbAdCreativesCreationData)
+class FbAd(models.Model):
+    class Meta:
+        verbose_name = "Anuncio de Facebook"
+        verbose_name_plural = "Anuncios de Facebook"
+    adcreative = models.ForeignKey(FbAdCreatives)
     #Actual Ad
     ad_field_name = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'AdName')
     ad_field_status = models.CharField(max_length = 100, null=True, blank = True, verbose_name = 'AdCreationStatus')
